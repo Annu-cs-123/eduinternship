@@ -19,7 +19,7 @@ app.get('/',(req,res) => {
 });
 
 //city Route
-app.get('/city',(req,res) => {
+app.get('/cities',(req,res) => {
     let sortcondition = {city_name:1};
     let limit =100
     if(req.query.sort && req.query.limit ){
@@ -31,7 +31,7 @@ app.get('/city',(req,res) => {
     }else if(req.query.limit){
       limit =Number(req.query.limit)
     }
-    db.collection('city').find().sort(sortcondition).limit(limit).toArray((err,result) => {
+    db.collection('cities').find().sort(sortcondition).limit(limit).toArray((err,result) => {
       if(err) throw err;
       res.send(result);
     })
@@ -41,7 +41,7 @@ app.get('/city',(req,res) => {
 //rest details
 app.get('/rest/:id',(req,res) =>{
   var id = req.params.id
-  db.collection('restaurent').find({_id:id}).toArray((err,result) => {
+  db.collection('rest').find({_id:id}).toArray((err,result) => {
     if(err) throw err;
     res.send(result)
   })
@@ -65,7 +65,7 @@ app.get('/rest',(req,res) => {
     }
     //meal +cuisine
     else if(req.query.mealtype && req.query.cuisine){
-      condition={$and:[{"type.mealtype":req.query.mealtype},{"Cuisine.cuisine":req.query.cuisine}]}
+      condition={$and:[{"type.mealtype":req.query.mealtype},{"Cuisine.cuisines":req.query.cuisine}]}
     }
    
     //meal
@@ -76,7 +76,7 @@ app.get('/rest',(req,res) => {
     else if(req.query.city){
       condition={city:req.query.city}
     }
-  db.collection('restaurent').find(condition).sort(sortcondition).toArray((err,result)=>{
+  db.collection('rest').find(condition).sort(sortcondition).toArray((err,result)=>{
     if(err) throw err;
     res.send(result)
   }) 
@@ -84,7 +84,7 @@ app.get('/rest',(req,res) => {
 
 //MealType Route
 app.get('/meal',(req,res) => {
-  db.collection('mealType').find().toArray((err,result) => {
+  db.collection('mealtype').find().toArray((err,result) => {
     if(err) throw err;
     res.send(result)
   })
@@ -92,7 +92,7 @@ app.get('/meal',(req,res) => {
 
 //cuisine route
 app.get('/cuisine',(req,res) => {
-  db.collection('cuisine').find().toArray((err,result) => {
+  db.collection('cuisines').find().toArray((err,result) => {
     if(err) throw err;
     res.send(result)
   })
